@@ -9,23 +9,47 @@ if (isset($_SESSION["username"])) {
 $error_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $username = $_POST["username"];
+  $input = $_POST["input"]; // Mengambil nilai input dari form
   $password = $_POST["password"];
 
   $conn = mysqli_connect("localhost", "kelompok1sic", "pemwebsic", "data_user");
 
-  $query = "SELECT * FROM AKUN WHERE user='$username' AND password='$password'";
-  $result = mysqli_query($conn, $query);
+  // Cek apakah input mengandung @admin.com
+  if (strpos($input, "@admin.com") !== false) {
+    // Jika mengandung @admin.com, cek ke tabel admin
+    $query_admin = "SELECT * FROM admin WHERE username='$input' AND password='$password'";
+    $result_admin = mysqli_query($conn, $query_admin);
+    
+    if (mysqli_num_rows($result_admin) == 1) {
+      // Jika login berhasil untuk admin
+      $_SESSION["username"] = $input; // Gunakan input sebagai identitas sesi
+      header("Location: dashboard.php");
+      exit();
+    } else {
+      // Jika login gagal untuk admin
+      $error_message = "Invalid admin credentials";
+    }
+  } else {
+    // Jika tidak mengandung @admin.com, cek ke tabel AKUN
+    $query_akun = "SELECT * FROM AKUN WHERE (user='$input' OR email='$input') AND password='$password'";
+    $result_akun = mysqli_query($conn, $query_akun);
 
-  if (mysqli_num_rows($result) == 1) {
-      $_SESSION["username"] = $username;
+    if (mysqli_num_rows($result_akun) == 1) {
+      // Jika login berhasil untuk user biasa
+      $row_akun = mysqli_fetch_assoc($result_akun);
+      $_SESSION["username"] = $row_akun["user"]; // Gunakan username sebagai identitas sesi
       header("Location: timeline.php");
       exit();
-  } else {
-      $error_message = "Username or Password incorrect";
+    } else {
+      // Jika login gagal untuk user biasa
+      $error_message = "Username or Email or Password incorrect";
+    }
   }
 }
 ?>
+
+
+
 
 
 <!DOCTYPE html>
@@ -47,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <p style="color: red;"><?php echo $error_message; ?></p>
     <?php endif; ?>
     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" onsubmit="return validateForm()">
-      <input type="text" id="username" name="username" placeholder="Username">
+      <input type="text" id="input" name="input" placeholder="Username or Email">
       <input type="password" id="password" name="password" placeholder="Password">
       <button type="submit">Login</button>
     </form>
