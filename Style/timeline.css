@@ -1,0 +1,138 @@
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #E8ECEB;
+  color: #2D3E4E;
+}
+
+header {
+  background-color: #8CBDB9;
+  color: #2D3E4E;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header .logo {
+  margin-top: 8px;
+}
+
+header h1 {
+  margin: 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+}
+
+
+main {
+  flex: 1;
+  display: flex;
+}
+
+.menu {
+  flex-basis: auto;
+  margin-right: auto;
+  width: 20%;
+}
+
+.menu ul {
+  list-style: none;
+}
+
+.menu ul li {
+  margin-bottom: 10px;
+}
+
+.menu ul li a {
+  text-decoration: none;
+  color: #333;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.post-container {
+  flex: 1;
+  max-width: 600px;
+  margin: 10px;
+  padding: 20px;
+}
+
+.post-container h2 {
+  margin-bottom: 10px;
+}
+
+.post-container textarea {
+  width: 100%;
+  height: auto;
+  padding: 10px;
+  margin-bottom: 10px;
+  resize: none;
+}
+
+.post-button {
+  background-color: #2D3E4E;
+  border-radius: 4px;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}
+
+.kontennn{
+  flex: 1 1 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-button:hover {
+  background-color: #444;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+}
+
+.suggestion-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+}
+
+@media only screen and (max-width: 768px) {
+  .menu {
+    flex-basis: auto;
+  }
+
+  .menu ul li {
+    margin-bottom: 8px;
+  }
+
+  .menu ul li a {
+    padding: 8px;
+  }
+
+  .content {
+    flex-direction: column;
+  }
+
+  .post-container,
+  .suggestion-container {
+    max-width: none;
+    width: auto;
+    margin: 10px;
+  }
+}

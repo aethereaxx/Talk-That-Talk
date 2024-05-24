@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  color: #2d3e4e;
+}
+
+body {
+  background-color: #e8eceb;
+}
+
+nav {
+  width: 100%;
+  height: 91px;
+  /* padding: 1px; */
+  background-color: #8cbdb9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .nav_container {
+    width: 90%;
+    display: flex;
+    display: flex;
+    align-items: center;
+
+    i {
+      font-size: 2.5rem;
+      margin-right: 4rem;
+    }
+
+    .nav_profile {
+      display: flex;
+      flex-direction: column;
+
+      h1 {
+        font-size: 30px;
+        font-weight: bold;
+      }
+
+      span {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.hero {
+  background-image: url("hero.png");
+  background-position: center;
+  background-size: cover;
+  height: 250px;
+
+  .hero_container {
+    width: 80%;
+    margin: 0 auto;
+    position: relative;
+    height: 100%;
+
+    .profile_picture {
+      border-radius: 50%;
+      width: 175px;
+      height: 175px;
+      position: absolute;
+      bottom: -80px;
+    }
+  }
+}
+
+main {
+  padding-top: 100px;
+  border-bottom: 1px solid #afafaf;
+
+  .container {
+    width: 80%;
+    margin: 0 auto;
+    padding-bottom: 0;
+
+    .profile_info {
+      h1 {
+        font-size: 40px;
+      }
+      span {
+        font-size: 22px;
+      }
+
+      .join_date {
+        margin-top: 25px;
+        margin-bottom: 15px;
+        display: flex;
+        gap: 15px;
+        justify-content: start;
+        align-items: center;
+
+        i {
+          font-size: 30px;
+          color: rgba(0, 0, 0, 0.52);
+        }
+
+        p {
+          color: rgba(0, 0, 0, 0.52);
+          font-size: 20px;
+        }
+      }
+
+      .follows {
+        display: flex;
+        gap: 50px;
+
+        p {
+          font-size: 20px;
+          color: rgba(0, 0, 0, 0.52);
+        }
+      }
+
+      .buttons {
+        margin-top: 2.5rem;
+        display: flex;
+        align-items: start;
+        gap: 12rem;
+
+        button {
+          padding: 10px 0px;
+          background-color: transparent;
+          outline: none;
+          cursor: pointer;
+          border: none;
+          font-weight: bold;
+          font-size: 24px;
+          opacity: 0.8;
+        }
+        button.active {
+          border-bottom: 5px solid #2d3e4e;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
