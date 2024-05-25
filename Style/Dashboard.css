@@ -53,7 +53,23 @@
     margin-right: -250px;
   }
   
-  
+  /* Tabel Styles */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table th,
+table td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f2f2f2;
+}
+
   /* Sidebar Styles */
   
   .sidebar-nav {
@@ -123,4 +139,3 @@
       margin-right: 0;
     }
   }
-  
