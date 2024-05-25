@@ -9,39 +9,33 @@ if (isset($_SESSION["username"])) {
 $error_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $input = $_POST["input"]; // Mengambil nilai input dari form
+  $input = $_POST["input"]; 
   $password = $_POST["password"];
 
   $conn = mysqli_connect("localhost", "kelompok1sic", "pemwebsic", "data_user");
 
-  // Cek apakah input mengandung @admin.com
   if (strpos($input, "@admin.com") !== false) {
-    // Jika mengandung @admin.com, cek ke tabel admin
     $query_admin = "SELECT * FROM admin WHERE username='$input' AND password='$password'";
     $result_admin = mysqli_query($conn, $query_admin);
     
     if (mysqli_num_rows($result_admin) == 1) {
-      // Jika login berhasil untuk admin
-      $_SESSION["username"] = $input; // Gunakan input sebagai identitas sesi
+      $_SESSION["username"] = $input; 
       header("Location: dashboard.php");
       exit();
     } else {
-      // Jika login gagal untuk admin
       $error_message = "Invalid admin credentials";
     }
   } else {
-    // Jika tidak mengandung @admin.com, cek ke tabel AKUN
+
     $query_akun = "SELECT * FROM AKUN WHERE (user='$input' OR email='$input') AND password='$password'";
     $result_akun = mysqli_query($conn, $query_akun);
 
     if (mysqli_num_rows($result_akun) == 1) {
-      // Jika login berhasil untuk user biasa
       $row_akun = mysqli_fetch_assoc($result_akun);
-      $_SESSION["username"] = $row_akun["user"]; // Gunakan username sebagai identitas sesi
+      $_SESSION["username"] = $row_akun["user"];
       header("Location: timeline.php");
       exit();
     } else {
-      // Jika login gagal untuk user biasa
       $error_message = "Username or Email or Password incorrect";
     }
   }
