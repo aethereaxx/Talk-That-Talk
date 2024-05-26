@@ -1,172 +1,141 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+<?php
+session_start();
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-  color: #2d3e4e;
+if (!isset($_SESSION["username"])) {
+    header("Location: login.php");
+    exit();
 }
 
-body {
-  background-color: #e8eceb;
-}
+$username = $_SESSION['username'];
 
-nav {
-  width: 100%;
-  height: 91px;
-  background-color: #8cbdb9;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  z-index: 9;
+// Database connection settings
+$dsn = "mysql:host=localhost;dbname=data_user;charset=utf8mb4";
+$dbUsername = "kelompok1sic";
+$dbPassword = "pemwebsic";
 
-  div {
-    width: 90%;
-    display: flex;
-    display: flex;
-    align-items: center;
+try {
+    // Create a PDO instance (connect to the database)
+    $pdo = new PDO($dsn, $dbUsername, $dbPassword);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    i {
-      font-size: 2.5rem;
-      margin-right: 4rem;
-    }
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Fetch and sanitize input data
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+        $birth_date = $_POST['birth_date'];
+        $password = $_POST['password'];
 
-    h1 {
-      font-size: 30px;
-      font-weight: bold;
-    }
-  }
-}
-
-.hero {
-  background-image: url("../img/hero.png");
-  background-position: center;
-  background-size: cover;
-  height: 300px;
-  position: relative;
-
-  .hero_container {
-    width: 80%;
-    margin: 0 auto;
-    position: relative;
-    height: 100%;
-
-    .profile_picture_container {
-      border-radius: 50%;
-      position: absolute;
-      width: 150px;
-      height: 150px;
-      bottom: -70px;
-      overflow: hidden;
-
-      .profile_picture {
-        width: 100%;
-        height: 100%;
-      }
-
-      .layer {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(182, 182, 182, 0.438);
-        z-index: 2;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        i {
-          font-size: 2rem;
-          color: white;
-        }
-      }
-    }
-  }
-
-  .hero_layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(182, 182, 182, 0.438);
-    z-index: 2;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    i {
-      font-size: 2rem;
-      color: white;
-      transform: translateY(100%);
-    }
-  }
-}
-
-main {
-  padding-top: 100px;
-  height: 120vh;
-
-  .container {
-    width: 80%;
-    margin: 0 auto;
-    padding-bottom: 0;
-
-    .card_container {
-      width: 90%;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-
-      .card {
-        padding: 1.5rem 2rem;
-        border: 2px solid #2d3e4e;
-        border-radius: 10px;
-
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        p {
-          font-size: 1.25rem;
+        // Prepare SQL query to update user details
+        $sql = "UPDATE akun SET email = :email, nama = :nama, tanggal_lahir = :tanggal_lahir WHERE user = :username";
+        
+        if (!empty($password)) {
+            // Hash the new password if it is set
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $sql = "UPDATE akun SET email = :email, nama = :nama, tanggal_lahir = :tanggal_lahir, password = :password WHERE user = :username";
         }
 
-        input {
-          font-size: 20px;
-          padding: 5px 10px;
-          border: none;
-          outline: none;
-          border-radius: 10px;
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':nama', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':tanggal_lahir', $birth_date, PDO::PARAM_STR);
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        
+        if (!empty($password)) {
+            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
         }
-      }
+
+        $stmt->execute();
+
+        // Redirect to the profile page after successful update
+        header("Location: profile.php");
+        exit();
     }
 
-    .btn_container {
-      width: 90%;
-      margin: 0 auto;
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 3rem;
+    // SQL query to fetch user details
+    $sql = "SELECT user, email, nama, password, tanggal_lahir FROM akun WHERE user = :username";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
 
-      button {
-        background-color: #8cbdb9;
-        color: #2d3e4e;
-        font-weight: bold;
-        font-size: 1.5rem;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        padding: 0.5rem 3rem;
-        border-radius: 50px;
-      }
+    $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$userData) {
+        die("No user found with the username: " . htmlspecialchars($username));
     }
-  }
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
 }
+?>
 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="../Style/editProfile.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <nav>
+      <div>
+        <a href="timeline.php"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1>Edit Profile</h1>
+      </div>
+    </nav>
+    <div class="hero">
+      <div class="hero_container">
+        <div class="profile_picture_container">
+          <div class="layer">
+            <i class="fa-solid fa-pen"></i>
+          </div>
+          <img
+            src="../img/profile_pic.png"
+            alt="profile"
+            class="profile_picture"
+          />
+        </div>
+      </div>
+      <div class="hero_layer">
+        <i class="fa-solid fa-pen"></i>
+      </div>
+    </div>
+    <main>
+      <div class="container">
+        <form action="editProfile.php" method="post">
+          <div class="card_container">
+            <div class="card">
+              <h2>Email</h2>
+              <input type="email" name="email" value="<?php echo htmlspecialchars($userData['email']); ?>" required />
+            </div>
+            <div class="card">
+              <h2>Username</h2>
+              <input type="text" name="username" value="<?php echo htmlspecialchars($userData['user']); ?>" required readonly />
+            </div>
+            <div class="card">
+              <h2>Name</h2>
+              <input type="text" name="name" value="<?php echo htmlspecialchars($userData['nama']); ?>" />
+            </div>
+            <div class="card">
+              <h2>Birth Date</h2>
+              <input type="date" name="birth_date" value="<?php echo htmlspecialchars($userData['tanggal_lahir']); ?>" />
+            </div>
+            <div class="card">
+              <h2>Password</h2>
+              <input type="password" name="password" placeholder="Enter new password" />
+            </div>
+          </div>
+          <div class="btn_container">
+            <button type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
