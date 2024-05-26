@@ -15,12 +15,13 @@ body {
 nav {
   width: 100%;
   height: 91px;
-  /* padding: 1px; */
   background-color: #8cbdb9;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  z-index: 1000;
 
   .nav_container {
     width: 90%;
@@ -32,6 +33,23 @@ nav {
       font-size: 2.5rem;
       margin-right: 4rem;
     }
+
+    .edit-profile-btn {
+      width: auto;
+      position: absolute;
+      top: 25px;
+      right: 20px;
+      height: 40px;
+      padding: 5px 15px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      background-color: #2D3E4E;
+    }
+    
 
     .nav_profile {
       display: flex;
@@ -50,7 +68,7 @@ nav {
 }
 
 .hero {
-  background-image: url("hero.png");
+  background-image: url("../img/hero.png");
   background-position: center;
   background-size: cover;
   height: 250px;
@@ -81,6 +99,7 @@ main {
     padding-bottom: 0;
 
     .profile_info {
+      margin-bottom: 25px;
       h1 {
         font-size: 40px;
       }
@@ -139,5 +158,36 @@ main {
         }
       }
     }
+
+    .post {
+      border: 1px solid #ddd;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+    .post-title {
+      font-weight: bold;
+    }
+    .post-meta {
+      font-size: 0.9em;
+      color: #555;
+    }
+    .post-content {
+      margin-top: 10px;
+    }
+    .like-count,
+    .comment-count {
+      font-size: 0.9em;
+      color: #555;
+    }
+    .comments {
+      margin-top: 10px;
+    }
+    .comment {
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
   }
 }
+
+
