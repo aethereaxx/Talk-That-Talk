@@ -2,13 +2,13 @@ body {
   font-family: "Poppins", sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #E8ECEB;
-  color: #2D3E4E;
+  background-color: #e8eceb;
+  color: #2d3e4e;
 }
 
 header {
-  background-color: #8CBDB9;
-  color: #2D3E4E;
+  background-color: #8cbdb9;
+  color: #2d3e4e;
   padding: 10px;
   display: flex;
   align-items: center;
@@ -28,7 +28,6 @@ header h1 {
   flex-direction: row;
   padding: 10px;
 }
-
 
 main {
   flex: 1;
@@ -52,6 +51,10 @@ main {
 .menu ul li a {
   text-decoration: none;
   color: #333;
+}
+
+.title {
+  width: 100%;
 }
 
 .content {
@@ -80,7 +83,7 @@ main {
 }
 
 .post-button {
-  background-color: #2D3E4E;
+  background-color: #2d3e4e;
   border-radius: 4px;
   color: #fff;
   padding: 10px 15px;
@@ -88,7 +91,7 @@ main {
   cursor: pointer;
 }
 
-.kontennn{
+.kontennn {
   flex: 1 1 0%;
   display: flex;
   justify-content: center;
@@ -110,6 +113,36 @@ main {
   flex-direction: column;
   align-items: center;
   width: 20%;
+}
+
+.user-post {
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  padding: 10px;
+
+  .post-title {
+    font-weight: bold;
+  }
+  .post-meta {
+    font-size: 0.9em;
+    color: #555;
+  }
+  .post-content {
+    margin-top: 10px;
+  }
+  .like-count,
+  .comment-count {
+    font-size: 0.9em;
+    color: #555;
+  }
+  .comments {
+    margin-top: 10px;
+  }
+  .comment {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
 }
 
 @media only screen and (max-width: 768px) {
