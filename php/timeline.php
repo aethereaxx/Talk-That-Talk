@@ -60,7 +60,6 @@
         <ul>
           <li><a href="timeline.php">Timeline</a></li>
           <li><a href="profile.php">Profile</a></li>
-          <li><a href="editProfile.php">Edit Profile</a></li>
           <li><a href="mute.php">Mute and Blocked</a></li>
           <li><a href="information.php">Information</a></li>
           <li><a href="license.php">License</a></li>

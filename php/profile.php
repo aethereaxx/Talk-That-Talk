@@ -89,6 +89,7 @@
           <h2><?php echo htmlspecialchars($userData['nama']); ?></h2>
           <span> <?php echo $userPostCount; ?> Post</span>
         </div>
+        <a href="editProfile.php"><button class="edit-profile-btn">Edit Profile</button></a>
       </div>
     </nav>
     <div class="hero">

@@ -17,8 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Database connection settings
     $dsn = "mysql:host=localhost;dbname=data_user;charset=utf8mb4";
-    $dbUsername = "root";
-    $dbPassword = "";
+    $dbUsername = "kelompok1sic";
+    $dbPassword = "pemwebsic";
 
     try {
         // Create a PDO instance (connect to the database)
