@@ -138,6 +138,6 @@
       </div>
     </main>
   </div>
-  <script src="js/Timeline.js"></script>
+  <script src="../Js/Timeline.js"></script>
 </body>
 </html>

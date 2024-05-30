@@ -32,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $query_insert = "INSERT INTO AKUN (user, password, email, nama, tanggal_lahir) VALUES ('$username', '$password', '$email', '$nama', '$tanggal_lahir')";
         if ($conn->query($query_insert) === TRUE) {
-            $success_message = "Registration Succeeded";
             header("Location: login.php");
             exit();
         } else {

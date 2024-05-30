@@ -1,68 +1,67 @@
-    $("#dashboard-link").click(function (e) {
-        e.preventDefault();
-        $("#dashboard-content").show();
-        $("#account-management-content").hide();
-        $("#posts-management-content").hide();
-        $("#update-form").hide();
+$(document).ready(function () {
+    // Toggle display of management sections
+    $('#dashboard-link').click(function () {
+        $('#dashboard-content').show();
+        $('#account-management-content').hide();
+        $('#posts-management-content').hide();
     });
 
-    $("#account-management-link").click(function (e) {
-        e.preventDefault();
-        $("#dashboard-content").hide();
-        $("#account-management-content").show();
-        $("#posts-management-content").hide();
-        $("#update-form").hide();
+    $('#account-management-link').click(function () {
+        $('#dashboard-content').hide();
+        $('#account-management-content').show();
+        $('#posts-management-content').hide();
     });
 
-    $("#posts-management-link").click(function (e) {
-        e.preventDefault();
-        $("#dashboard-content").hide();
-        $("#account-management-content").hide();
-        $("#posts-management-content").show();
-        $("#update-form").hide();
+    $('#posts-management-link').click(function () {
+        $('#dashboard-content').hide();
+        $('#account-management-content').hide();
+        $('#posts-management-content').show();
     });
 
-    $(".update-button").click(function () {
-        var username = $(this).data('username');
-        var row = $("tr[data-username='" + username + "']");
-        $("#update-username").val(username);
-        $("#update-nama").val(row.find("td:eq(0)").text());
-        $("#update-email").val(row.find("td:eq(1)").text());
-        $("#update-password").val(row.find("td:eq(3)").text());
-        $("#update-tanggal_lahir").val(row.find("td:eq(4)").text());
-        $("#update-form").show();
+    // Handle update button click for users
+    $('.update-button').click(function () {
+        var row = $(this).closest('tr');
+        var username = row.data('username');
+        var nama = row.find('td:eq(0)').text();
+        var email = row.find('td:eq(1)').text();
+        var password = row.find('td:eq(3)').text();
+        var tanggal_lahir = row.find('td:eq(4)').text();
+
+        $('#update-form').show();
+        $('#delete-form').hide();
+        $('#update-username').val(username);
+        $('#update-old-username').val(username); // hidden field for old username
+        $('#update-nama').val(nama);
+        $('#update-email').val(email);
+        $('#update-password').val(password);
+        $('#update-tanggal_lahir').val(tanggal_lahir);
     });
 
-    $(".delete-button").click(function () {
-        var username = $(this).data('username');
-        if (confirm('Are you sure you want to delete this account?')) {
-            $("#delete-username").val(username);
-            $("#delete-form").submit();
-        }
+    // Handle delete button click for users
+    $('.delete-button').click(function () {
+        var username = $(this).closest('tr').data('username');
+        $('#delete-username').val(username);
+        $('#delete-form').submit();
     });
 
-    $("#update-form").submit(function (e) {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "dashboard.php",
-            data: $(this).serialize(),
-            success: function () {
-                alert('Account updated successfully.');
-                location.reload();
-            }
-        });
+    // Handle update button click for posts
+    $('.update-post-button').click(function () {
+        var row = $(this).closest('tr');
+        var postID = row.data('post-id');
+        var title = row.find('td:eq(1)').text();
+        var content = row.find('td:eq(2)').text();
+
+        $('#update-post-form').show();
+        $('#delete-post-form').hide();
+        $('#update-post-id').val(postID);
+        $('#update-title').val(title);
+        $('#update-content').val(content);
     });
 
-    $("#delete-form").submit(function (e) {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "dashboard.php",
-            data: $(this).serialize(),
-            success: function () {
-                alert('Account deleted successfully.');
-                location.reload();
-            }
-        });
+    // Handle delete button click for posts
+    $('.delete-post-button').click(function () {
+        var postID = $(this).closest('tr').data('post-id');
+        $('#delete-post-id').val(postID);
+        $('#delete-post-form').submit();
     });
+});

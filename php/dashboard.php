@@ -7,27 +7,46 @@ if (!$conn) {
 }
 
 // Update user data
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_user') {
+    $old_username = $_POST['old_username'];
     $username = $_POST['username'];
     $nama = $_POST['nama'];
     $email = $_POST['email'];
     $password = $_POST['password'];
     $tanggal_lahir = $_POST['tanggal_lahir'];
-    
-    $query = "UPDATE AKUN SET nama='$nama', email='$email', password='$password', tanggal_lahir='$tanggal_lahir' WHERE user='$username'";
+
+    $query = "UPDATE akun SET user='$username', nama='$nama', email='$email', password='$password', tanggal_lahir='$tanggal_lahir' WHERE user='$old_username'";
     mysqli_query($conn, $query);
 }
 
 // Delete user data
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_user') {
     $username = $_POST['username'];
-    
-    $query = "DELETE FROM AKUN WHERE user='$username'";
+
+    $query = "DELETE FROM akun WHERE user='$username'";
     mysqli_query($conn, $query);
 }
 
-// Ambil data user dari tabel AKUN
-$query = "SELECT * FROM AKUN";
+// Update post data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_post') {
+    $post_id = $_POST['postID'];
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+
+    $query = "UPDATE posts SET title='$title', content='$content', updated_at=CURRENT_TIMESTAMP WHERE postID='$post_id'";
+    mysqli_query($conn, $query);
+}
+
+// Delete post data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_post') {
+    $post_id = $_POST['postID'];
+
+    $query = "DELETE FROM posts WHERE postID='$post_id'";
+    mysqli_query($conn, $query);
+}
+
+// Ambil data user dari tabel akun
+$query = "SELECT * FROM akun";
 $result = mysqli_query($conn, $query);
 
 $users = [];
@@ -37,18 +56,31 @@ if ($result) {
         $users[] = $row;
     }
 }
+
+// Ambil data posts dari tabel posts
+$query = "SELECT * FROM posts";
+$result = mysqli_query($conn, $query);
+
+$posts = [];
+
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $posts[] = $row;
+    }
+}
+
 mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="../Style/Dashboard.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../Style/Dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Dashboard</title>
 </head>
 <body>
     <div id="wrapper" class="toggled">
@@ -78,7 +110,7 @@ mysqli_close($conn);
                 <p>This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.</p>
                 <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p>
             </div>
-            
+
             <div class="container-fluid" id="account-management-content" style="display:none;">
                 <h1>Account Management</h1>
                 <table>
@@ -108,10 +140,14 @@ mysqli_close($conn);
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <form id="update-form" style="display:none; margin-top: 20px;">
+                <form id="update-form" style="display:none; margin-top: 20px;" method="post">
                     <h2>Update Account</h2>
-                    <input type="hidden" name="username" id="update-username">
-                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="old_username" id="update-old-username">
+                    <input type="hidden" name="action" value="update_user">
+                    <div>
+                        <label for="update-username">Username:</label>
+                        <input type="text" name="username" id="update-username">
+                    </div>
                     <div>
                         <label for="update-nama">Nama:</label>
                         <input type="text" name="nama" id="update-nama">
@@ -130,15 +166,61 @@ mysqli_close($conn);
                     </div>
                     <button type="submit">Update</button>
                 </form>
-                <form id="delete-form" style="display:none;">
+                <form id="delete-form" style="display:none;" method="post">
                     <input type="hidden" name="username" id="delete-username">
-                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="action" value="delete_user">
                 </form>
             </div>
-            
+
             <div class="container-fluid" id="posts-management-content" style="display:none;">
                 <h1>Posts Management</h1>
-                <p>Content for Posts Management</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Post ID</th>
+                            <th>Title</th>
+                            <th>Content</th>
+                            <th>Author</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($posts as $post): ?>
+                        <tr data-post-id="<?= $post['postID']; ?>">
+                            <td><?= $post['postID']; ?></td>
+                            <td><?= $post['title']; ?></td>
+                            <td><?= $post['content']; ?></td>
+                            <td><?= $post['author']; ?></td>
+                            <td><?= $post['created_at']; ?></td>
+                            <td><?= $post['updated_at']; ?></td>
+                            <td>
+                                <button class="update-post-button" data-post-id="<?= $post['postID']; ?>">Update</button>
+                                <button class="delete-post-button" data-post-id="<?= $post['postID']; ?>">Delete</button>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <form id="update-post-form" style="display:none; margin-top: 20px;" method="post">
+                    <h2>Update Post</h2>
+                    <input type="hidden" name="postID" id="update-post-id">
+                    <input type="hidden" name="action" value="update_post">
+                    <div>
+                        <label for="update-title">Title:</label>
+                        <input type="text" name="title" id="update-title">
+                    </div>
+                    <div>
+                        <label for="update-content">Content:</label>
+                        <textarea name="content" id="update-content" rows="4" cols="50"></textarea>
+                    </div>
+                    <button type="submit">Update</button>
+                </form>
+                <form id="delete-post-form" style="display:none;" method="post">
+                    <input type="hidden" name="postID" id="delete-post-id">
+                    <input type="hidden" name="action" value="delete_post">
+                </form>
             </div>
         </div>
     </div>
