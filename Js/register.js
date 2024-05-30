@@ -5,6 +5,13 @@ function validatePassword(password) {
   return true;
 }
 
+function validateUsername(username) {
+  if (username.startsWith("t3adm")) {
+    return false;
+  }
+  return true;
+}
+
 function validateAge(dateOfBirth) {
   var today = new Date();
   var birthDate = new Date(dateOfBirth);

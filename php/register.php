@@ -11,6 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $nama = $_POST["nama"];
   $tanggal_lahir = $_POST["tanggal_lahir"];
 
+  if (substr($username, 0, 5) === "t3adm") {
+    $error_message = "Username is prohibited, try another username.";
+  } else {
   try {
     $conn = new mysqli("localhost", "kelompok1sic", "pemwebsic", "data_user");
     $conn->set_charset("utf8");
@@ -42,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $error_message = "Registration failed: " . $e->getMessage();
 } finally {
     $conn->close();
+}
 }
 }
 ?>
