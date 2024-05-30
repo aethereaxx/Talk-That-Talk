@@ -41,7 +41,11 @@ main {
 }
 
 .menu ul {
+  margin-left: -10px;
+  width: 250px;
+  height: 250px;
   list-style: none;
+  position: fixed;
 }
 
 .menu ul li {

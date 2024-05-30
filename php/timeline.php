@@ -1,7 +1,7 @@
 <?php
   session_start();
 
-  if (!isset($_SESSION["username"])) {
+  if (!isset($_SESSION["username"]) || ((isset($_SESSION["username"])) && (substr($_SESSION["username"], 0, 5) === "t3adm"))) {
       header("Location: login.php");
       exit();
   }
@@ -58,6 +58,7 @@
     <aside class="menu">
       <nav>
         <ul>
+          <li><h2>Hello <?php echo $_SESSION["username"]?>!!</h2></li>
           <li><a href="timeline.php">Timeline</a></li>
           <li><a href="profile.php">Profile</a></li>
           <li><a href="mute.php">Mute and Blocked</a></li>
@@ -69,7 +70,6 @@
     </aside>
     <main class="main-container">
       <div class="main-content">
-
         <div class="kontennn">
           <div class="post-container">
             <h2>Post Content</h2>
@@ -93,6 +93,16 @@
                     <input type="hidden" name="postID" value="<?php echo htmlspecialchars($post['postID']); ?>">
                     <button type="submit">Like</button>
                 </form>
+
+                <?php
+                if ($post['author'] == $_SESSION["username"] ) { ?>       
+                  <form action="delete_post.php" method="POST" style="display:inline;">
+                  <input type="hidden" name="postID" value="<?php echo htmlspecialchars($post['postID']); ?>">
+                  <button type="submit" onclick="return confirm('Are you sure you want to delete this post?');">Delete</button>
+                  </form>
+                <?php 
+                }
+                ?>
 
                 <!-- Comment Form -->
                 <div class="comment-form">

@@ -43,7 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
 
         // Redirect back to the profile page
-        header("Location: profile.php");
+        $referrer = $_SERVER['HTTP_REFERER'];
+        header("Location: " . $referrer);
         exit();
 
     } catch (PDOException $e) {

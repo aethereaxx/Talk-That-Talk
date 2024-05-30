@@ -1,3 +1,12 @@
+<?php
+  session_start();
+
+  if (!isset($_SESSION["username"]) || ((isset($_SESSION["username"])) && (substr($_SESSION["username"], 0, 5) === "t3adm"))) {
+      header("Location: login.php");
+      exit();
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

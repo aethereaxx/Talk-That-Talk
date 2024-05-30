@@ -2,7 +2,11 @@
 session_start();
 
 if (isset($_SESSION["username"])) {
-  header("Location: timeline.php");
+  if (substr($_SESSION["username"], 0, 5) === "t3adm") {
+    header("Location: dashboard.php");
+  } else {
+    header("Location: timeline.php");
+  }
   exit();
 }
 
@@ -14,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $conn = mysqli_connect("localhost", "kelompok1sic", "pemwebsic", "data_user");
 
-  if (strpos($input, "@admin.com") !== false) {
+  if (substr($input, 0, 5) === "t3adm") {
     $query_admin = "SELECT * FROM admin WHERE username='$input' AND password='$password'";
     $result_admin = mysqli_query($conn, $query_admin);
     
