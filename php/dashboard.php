@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if (!isset($_SESSION["username"]) || ((isset($_SESSION["username"])) && (substr($_SESSION["username"], 0, 5) !== "t3adm"))) {
@@ -23,14 +22,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $password = $_POST['password'];
     $tanggal_lahir = $_POST['tanggal_lahir'];
 
-    $query = "UPDATE akun SET user='$username', nama='$nama', email='$email', password='$password', tanggal_lahir='$tanggal_lahir' WHERE user='$old_username'";
-    mysqli_query($conn, $query);
+    // Begin transaction
+    mysqli_begin_transaction($conn);
+
+    try {
+        // Update user in akun table
+        $query = "UPDATE akun SET user='$username', nama='$nama', email='$email', password='$password', tanggal_lahir='$tanggal_lahir' WHERE user='$old_username'";
+        mysqli_query($conn, $query);
+
+        // Update posts with new username
+        $query = "UPDATE posts SET author='$username' WHERE author='$old_username'";
+        mysqli_query($conn, $query);
+
+        // Commit transaction
+        mysqli_commit($conn);
+    } catch (mysqli_sql_exception $exception) {
+        // Rollback transaction
+        mysqli_rollback($conn);
+        throw $exception;  // Handle exception as needed
+    }
 }
 
 // Delete user data
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_user') {
     $username = $_POST['username'];
 
+    // Posts akan otomatis terhapus karena constraint ON DELETE CASCADE
     $query = "DELETE FROM akun WHERE user='$username'";
     mysqli_query($conn, $query);
 }
@@ -116,7 +133,7 @@ mysqli_close($conn);
             <div class="container-fluid" id="dashboard-content">
                 <h1>Halo Admin!</h1>
                 <p>Ini adalah dashboard khusus untuk Admin.</p>
-                <p>Silakan pilih menu untuk autorisasi lebih lanjut.</p>
+                <p>Silakan pilih menu untuk otorisasi lebih lanjut.</p>
             </div>
 
             <div class="container-fluid" id="account-management-content" style="display:none;">
@@ -144,8 +161,8 @@ mysqli_close($conn);
                                 <button class="update-button" data-username="<?= $user['user']; ?>">Update</button>
                                 <button class="delete-button" data-username="<?= $user['user']; ?>">Delete</button>
                             </td>
-                        </tr>
                         <?php endforeach; ?>
+                        </tr>
                     </tbody>
                 </table>
                 <form id="update-form" style="display:none; margin-top: 20px;" method="post">
@@ -207,8 +224,8 @@ mysqli_close($conn);
                                 <button class="update-post-button" data-post-id="<?= $post['postID']; ?>">Update</button>
                                 <button class="delete-post-button" data-post-id="<?= $post['postID']; ?>">Delete</button>
                             </td>
-                        </tr>
                         <?php endforeach; ?>
+                        </tr>
                     </tbody>
                 </table>
                 <form id="update-post-form" style="display:none; margin-top: 20px;" method="post">
