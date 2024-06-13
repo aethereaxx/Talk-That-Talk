@@ -1,8 +1,11 @@
 function validatePassword(password) {
   if (password.length < 8) {
-      return false;
+    return false;
   }
-  return true;
+  const hasLetter = /[a-zA-Z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+
+  return hasLetter && hasNumber;
 }
 
 function validateUsername(username) {
@@ -26,6 +29,11 @@ function validateAge(dateOfBirth) {
   return true;
 }
 
+function validateEmail(email) {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailPattern.test(email);
+}
+
 function showError(message) {
   var errorElement = document.getElementsByClassName("error-message")[0];
   errorElement.innerText = message;
@@ -41,17 +49,24 @@ function hideError() {
 function handleSubmit() {
   var password = document.getElementById('password').value;
   var dateOfBirth = document.getElementById('tanggal_lahir').value;
+  var email = document.getElementById("email").value;
+
 
   hideError();
 
   if (!validatePassword(password)) {
-      showError('Password must be at least 8 characters');
+      showError("Password must be at least 8 characters and contain both letters and numbers");
       return false;
   }
 
   if (!validateAge(dateOfBirth)) {
       showError('You must be at least 14 years old to register');
       return false;
+  }
+
+  if (!validateEmail(email)) {
+    showError("Please enter a valid email address");
+    return false;
   }
 
   return true; 
