@@ -2,10 +2,11 @@ function validatePassword(password) {
   if (password.length < 8) {
     return false;
   }
-  const hasLetter = /[a-zA-Z]/.test(password);
-  const hasNumber = /[0-9]/.test(password);
+  invalidCharPattern = /[^a-zA-Z0-9]/;
 
-  return hasLetter && hasNumber;
+  if (invalidCharPattern.test(password)) {
+    return false;
+  }
 }
 
 function validateUsername(username) {
