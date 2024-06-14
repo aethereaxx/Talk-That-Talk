@@ -144,7 +144,7 @@ mysqli_close($conn);
                             <th>Nama</th>
                             <th>Email</th>
                             <th>Username</th>
-                            <th>Password</th>
+                            <!-- <th>Password</th> -->
                             <th>Tanggal Lahir</th>
                             <th>Aksi</th>
                         </tr>
@@ -155,7 +155,7 @@ mysqli_close($conn);
                             <td><?= $user['nama']; ?></td>
                             <td><?= $user['email']; ?></td>
                             <td><?= $user['user']; ?></td>
-                            <td><?= $user['password']; ?></td>
+                            <!-- <td><?= $user['password']; ?></td> -->
                             <td><?= $user['tanggal_lahir']; ?></td>
                             <td>
                                 <button class="update-button" data-username="<?= $user['user']; ?>">Update</button>
@@ -181,10 +181,10 @@ mysqli_close($conn);
                         <label for="update-email">Email:</label>
                         <input type="email" name="email" id="update-email">
                     </div>
-                    <div>
+                    <!-- <div>
                         <label for="update-password">Password:</label>
                         <input type="password" name="password" id="update-password">
-                    </div>
+                    </div> -->
                     <div>
                         <label for="update-tanggal_lahir">Tanggal Lahir:</label>
                         <input type="date" name="tanggal_lahir" id="update-tanggal_lahir">
