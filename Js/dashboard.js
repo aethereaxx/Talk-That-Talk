@@ -37,11 +37,13 @@ $(document).ready(function () {
         $('#update-tanggal_lahir').val(tanggal_lahir);
     });
 
-    // Handle delete button click for users
+    // Handle delete button click for users with confirmation
     $('.delete-button').click(function () {
         var username = $(this).closest('tr').data('username');
-        $('#delete-username').val(username);
-        $('#delete-form').submit();
+        if (confirm('Are you sure you want to delete this account?')) {
+            $('#delete-username').val(username);
+            $('#delete-form').submit();
+        }
     });
 
     // Handle update button click for posts
@@ -58,10 +60,12 @@ $(document).ready(function () {
         $('#update-content').val(content);
     });
 
-    // Handle delete button click for posts
+    // Handle delete button click for posts with confirmation
     $('.delete-post-button').click(function () {
         var postID = $(this).closest('tr').data('post-id');
-        $('#delete-post-id').val(postID);
-        $('#delete-post-form').submit();
+        if (confirm('Are you sure you want to delete this post?')) {
+            $('#delete-post-id').val(postID);
+            $('#delete-post-form').submit();
+        }
     });
 });
