@@ -7,6 +7,8 @@ function validatePassword(password) {
   if (invalidCharPattern.test(password)) {
     return false;
   }
+
+  return true;
 }
 
 function validateUsername(username) {
@@ -53,10 +55,11 @@ function handleSubmit() {
   var email = document.getElementById("email").value;
 
 
-  hideError();
+  // hideError();
 
   if (!validatePassword(password)) {
       showError("Password must be at least 8 characters and contain both letters and numbers");
+      alert("masuk sini");
       return false;
   }
 

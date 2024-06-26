@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $username = $_POST['username'];
     $nama = $_POST['nama'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
     $tanggal_lahir = $_POST['tanggal_lahir'];
 
     // Begin transaction
@@ -27,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     try {
         // Update user in akun table
-        $query = "UPDATE akun SET user='$username', nama='$nama', email='$email', password='$password', tanggal_lahir='$tanggal_lahir' WHERE user='$old_username'";
+        $query = "UPDATE akun SET user='$username', nama='$nama', email='$email', tanggal_lahir='$tanggal_lahir' WHERE user='$old_username'";
         mysqli_query($conn, $query);
 
         // Update posts with new username
